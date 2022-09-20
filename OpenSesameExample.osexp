@@ -1,6 +1,6 @@
 ---
 API: 2.1
-OpenSesame: 3.3.4a8
+OpenSesame: 3.3.12
 Platform: posix
 ---
 set width 1024
@@ -26,7 +26,7 @@ set font_size 18
 set font_italic no
 set font_family mono
 set font_bold no
-set experiment_path "/home/maarten/Documents/PhD/user-models-2020"
+set experiment_path "/Users/eragon/Documents/CODE/Github/group-project-team-studysmart"
 set disable_garbage_collection yes
 set description "The main experiment item"
 set coordinates uniform
@@ -461,9 +461,8 @@ define sequence trial_sequence
 	run present_trial always
 
 define loop while_there_is_time_left
-	set source_file ""
 	set source table
-	set repeat 1000
+	set repeat 999
 	set order random
 	set description "Repeatedly runs another item"
 	set cycles 1

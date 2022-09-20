@@ -1,0 +1,4 @@
+trial,start_time,rt,correct,fact_id,question,answer,alpha
+1,5286.68124997057,1646.683832979761,False,1,hello,bonjour,0.3
+2,11932.660707971081,973.8224169705063,False,1,hello,bonjour,0.3
+
