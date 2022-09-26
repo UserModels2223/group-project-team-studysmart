@@ -1,0 +1,11 @@
+id,question,context_1,context_2,answer
+1,"gemiddeld","Deze opleiding heeft 'gemiddeld' 60 studenten per jaar.","De temperatuur in Nederland is 'gemiddeld' 15 graden.","average"
+2,"vervelend","Ik vind het 'vervelend' als de koffie op is.","Doe eens niet zo 'vervelend'.","annoying"
+3,"algemeen","Dat is niet 'algemeen' bekend.","Over het 'algemeen' ben ik hier heel goed in.","general"
+4,"matig","De burger smaakte een beetje 'matig'.","Ik ben 'matig' enthousiast over deze activiteit.","mediocre"
+5,"verwachten","Ze 'verwachten' dat het morgen gaat regenen.","Wij 'verwachten' dat jij het goed gaat doen.","expect"
+6,"vergeten","Ben je nou alweer je sleutel 'vergeten'?","Sorry, we waren 'vergeten' de wiki aan te passen.","forget"
+7,"onderdeel","Ik mis een 'onderdeel' van mijn IKEA kast.","Deze opleiding is een 'onderdeel' van de Rijksuniversiteit Groningen.","part"
+8,"meningen","Politici hebben altijd veel 'meningen'.","Ik heb verschillende 'meningen' over dit onderwerp.","opinions"
+9,"alternatief","Ik vind thee geen goed 'alternatief' voor koffie.","Ik heb een 'alternatief' voorstel.","alternative"
+10,"woordenschat","Ik heb een goede 'woordenschat'.","Een boek lezen doet wonderen voor je 'woordenschat'.","vocabulary"
