@@ -1,6 +1,6 @@
-trial,start_time,rt,correct,fact_id,context_1,context_2,answer,alpha,reading_time
-1,34029,2207,True,1,je bent een eend,dat is een eend,duck,0.3,300
-2,38007,1890,True,1,je bent een eend,dat is een eend,duck,0.3,300
-3,50000,1200,True,2,heb je een huis,ben je in een huis?,house,0.3,300
-4,60000,1100,True,2,heb je een huis,ben je in een huis?,house,0.3,300
-5,70000,1000,True,2,heb je een huis,ben je in een huis?,house,0.250390625,300
+trial,start_time,rt,correct,fact_id,context_1,context_2,answer,chosen_context,alpha,reading_time
+1,34029,2207,True,1,Deze opleiding heeft 'gemiddeld' 60 studenten per jaar.,De temperatuur in Nederland is 'gemiddeld' 15 graden.,average,,0.3,914.6
+2,38007,1890,True,1,Deze opleiding heeft 'gemiddeld' 60 studenten per jaar.,De temperatuur in Nederland is 'gemiddeld' 15 graden.,average,,0.3,914.6
+3,50000,1200,True,2,Ik vind het 'vervelend' als de koffie op is.,Doe eens niet zo 'vervelend'.,annoying,,0.3,700.1
+4,60000,1100,True,2,Ik vind het 'vervelend' als de koffie op is.,Doe eens niet zo 'vervelend'.,annoying,,0.3,700.1
+5,70000,1000,True,2,Ik vind het 'vervelend' als de koffie op is.,Doe eens niet zo 'vervelend'.,annoying,,0.250390625,700.1
