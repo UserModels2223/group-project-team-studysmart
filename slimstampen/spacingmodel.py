@@ -1,9 +1,11 @@
 from __future__ import division
 import math
+import random
 import pandas as pd
 from collections import namedtuple
 
-Fact = namedtuple("Fact", "fact_id, question, answer")
+# Fact = namedtuple("Fact", "fact_id, question, answer")
+Fact = namedtuple("Fact", "fact_id, context_1,context_2, answer")
 Response = namedtuple("Response", "fact, start_time, rt, correct")
 Encounter = namedtuple("Encounter", "activation, time, reaction_time, decay")
 
@@ -20,6 +22,10 @@ class SpacingModel(object):
     def __init__(self):
         self.facts = []
         self.responses = []
+    
+    def decide_context(self, context_1="test", *args, **kwargs):
+        combined = [context_1,*args]
+        return random.choice(combined)
 
     def add_fact(self, fact):
         # type: (Fact) -> None
@@ -136,7 +142,9 @@ class SpacingModel(object):
             return(self.DEFAULT_ALPHA)
 
         a_fit = previous_alpha
-        reading_time = self.get_reading_time(response.fact.question)
+        chosen_context = self.decide_context(response.fact.context_1, response.fact.context_2)
+        # reading_time = self.get_reading_time(response.fact.question)
+        reading_time = self.get_reading_time(chosen_context)
         estimated_rt = self.estimate_reaction_time_from_activation(activation, reading_time)
         est_diff = estimated_rt - self.normalise_reaction_time(response)
 
@@ -208,7 +216,10 @@ class SpacingModel(object):
         """
         Return the highest response time we can reasonably expect for a given fact
         """
-        reading_time = self.get_reading_time(fact.question)
+
+        chosen_context = self.decide_context(fact.context_1, fact.context_2)
+        reading_time = self.get_reading_time(chosen_context)
+        # reading_time = self.get_reading_time(fact.question)
         max_rt = 1.5 * self.estimate_reaction_time_from_activation(self.FORGET_THRESHOLD, reading_time)
         return(max_rt)
 
@@ -246,6 +257,9 @@ class SpacingModel(object):
 
         def calc_rof(row):
             return(self.get_rate_of_forgetting(row["start_time"] + 1, row["fact"]))
+        
+        def calc_reading_time(row):
+            return(self.get_reading_time(row["fact"].context_1))
 
         dat_resp = pd.DataFrame(self.responses)
         dat_facts = pd.DataFrame([r.fact for r in self.responses])
@@ -253,6 +267,7 @@ class SpacingModel(object):
 
         # Add column for rate of forgetting estimate after each observation
         dat["alpha"] = dat.apply(calc_rof, axis = 1)
+        dat["reading_time"] = dat.apply(calc_reading_time, axis =1)
         dat.drop(columns = "fact", inplace = True)
 
         # Add trial number column
