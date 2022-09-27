@@ -3,12 +3,13 @@ import math
 import random
 import pandas as pd
 from collections import namedtuple
+import numpy as np
+import re
 
 # Fact = namedtuple("Fact", "fact_id, question, answer")
 Fact = namedtuple("Fact", "fact_id, context_1,context_2, answer, chosen_context")
 Response = namedtuple("Response", "fact, start_time, rt, correct")
 Encounter = namedtuple("Encounter", "activation, time, reaction_time, decay")
-
 
 class SpacingModel(object):
 
@@ -24,10 +25,14 @@ class SpacingModel(object):
         self.responses = []
     
     def decide_context(self, context_1="test", *args, **kwargs):
+        """
+        Just picks a random one from the contexts we have. In this case there are just two contexts
+        """
         combined = [context_1,*args]
         chs = random.choice(range(len(combined)))
         return chs, combined[chs]
-
+    
+    
     def add_fact(self, fact):
         # type: (Fact) -> None
         """
@@ -250,6 +255,49 @@ class SpacingModel(object):
         return(min(rt, max_rt))
 
 
+    
+class UIFeatures(SpacingModel):
+    """
+    Separating UI Specific Functions in a different class for readability and efficiency
+    """
+    def __init__(self) -> None:
+        super().__init__()
+        self.vocab_df = pd.read_csv("./vocabulary_marked.csv") #annotated data
+        self.vocab_dict = dict(zip(self.vocab_df["question"].values, self.vocab_df["answer"].values)) # word: translation pairs
+        self.reverse_vocab_dict = dict(zip(self.vocab_df["answer"].values, self.vocab_df["question"].values)) # translation:word pairs
+
+    def word_from_context(self, context):
+        """
+        Extract the required word from the context. 
+        Eg: 
+        "Deze opleiding heeft 'gemiddeld' 60 studenten per jaar." -> 'gemiddeld'
+        """
+        return re.findall("'.*'", context)[-1].replace("'","")
+    
+    def ret_translated_word(self, word):
+        """
+        Return the translation of the word from the dataframe. eg: English <-> Dutch 
+        """
+        try:
+            return self.vocab_dict[word]
+        except KeyError:
+            return self.reverse_vocab_dict[word]
+        else:
+            print("Wrong word. Not in dict")
+    
+    def ret_translated_context(self, context):
+        """
+        Finds the word from the annotated context and return the translation of the word from the dataframe
+        """
+
+        return self.ret_translated_word(self.word_from_context(context=context))
+    
+    def calc_rof(self,row):
+            return(self.get_rate_of_forgetting(row["start_time"] + 1, row["fact"]))
+        
+    def calc_reading_time(self,row):
+        return(self.get_reading_time(row["fact"].context_1))
+    
     def export_data(self, path = None):
         # type: (str) -> DataFrame
         """
@@ -257,23 +305,41 @@ class SpacingModel(object):
         If no path is specified, return a CSV-formatted copy of the data instead.
         """
 
-        def calc_rof(row):
-            return(self.get_rate_of_forgetting(row["start_time"] + 1, row["fact"]))
+        dat = self.create_statistics()
+        # Save to CSV file if a path was specified, otherwise return the CSV-formatted output
+        if path is not None:
+            dat.to_csv(path, encoding="UTF-8")
+            return(dat)
         
-        def calc_reading_time(row):
-            return(self.get_reading_time(row["fact"].context_1))
+        return(dat.to_csv())
+    
+    def achievement(self):
+        """
+        All stats for user achievements
+        """
+        dat = self.create_statistics()
+        correct, wrong = dat["correct"].value_counts().values
+        mean_correct = correct/(correct+wrong)
+        mean_wrong = wrong/(correct+wrong)
 
-        def chosen_context_finder(row):
-            return(row["fact"].chosen_context)
+        return f"""
+        \n
+        Trial Index : {dat.index}\r
+        Total Correct : {correct}\r
+        Total Wrong : {wrong}\r
+        Mean Correct : {mean_correct}\r
+        Mean Wrong : {mean_wrong}\r
+        """
 
 
+    def create_statistics(self):
         dat_resp = pd.DataFrame(self.responses)
         dat_facts = pd.DataFrame([r.fact for r in self.responses])
         dat = pd.concat([dat_resp, dat_facts], axis = 1)
 
         # Add column for rate of forgetting estimate after each observation
-        dat["alpha"] = dat.apply(calc_rof, axis = 1)
-        dat["reading_time"] = dat.apply(calc_reading_time, axis =1)
+        dat["alpha"] = dat.apply(self.calc_rof, axis = 1)
+        dat["reading_time"] = dat.apply(self.calc_reading_time, axis =1)
         # dat["chosen_context"] = dat.apply(chosen_context_finder, axis =1)
         dat.drop(columns = "fact", inplace = True)
 
@@ -281,9 +347,6 @@ class SpacingModel(object):
         dat.index.name = "trial"
         dat.index = dat.index + 1
 
-        # Save to CSV file if a path was specified, otherwise return the CSV-formatted output
-        if path is not None:
-            dat.to_csv(path, encoding="UTF-8")
-            return(dat)
-        
-        return(dat.to_csv())
+        return dat
+
+
