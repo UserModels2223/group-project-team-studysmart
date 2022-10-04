@@ -7,7 +7,7 @@ import numpy as np
 import re
 
 # Fact = namedtuple("Fact", "fact_id, question, answer")
-Fact = namedtuple("Fact", "fact_id, context_1,context_2, answer, chosen_context")
+Fact = namedtuple("Fact", "fact_id, question, context_1, context_2, answer, chosen_context")
 Response = namedtuple("Response", "fact, start_time, rt, correct")
 Encounter = namedtuple("Encounter", "activation, time, reaction_time, decay")
 
@@ -16,6 +16,7 @@ class SpacingModel(object):
     # Model constants
     LOOKAHEAD_TIME = 15000
     FORGET_THRESHOLD = -0.8
+    SWITCH_THRESHOLD = -0.9
     DEFAULT_ALPHA = 0.3
     C = 0.25
     F = 1.0
@@ -24,13 +25,21 @@ class SpacingModel(object):
         self.facts = []
         self.responses = []
     
-    def decide_context(self, context_1="test", *args, **kwargs):
+    def decide_context(self, fact):
         """
-        Just picks a random one from the contexts we have. In this case there are just two contexts
+        Changes the cosen context to word if the activation is above the switch threshold, 
+        and back to context if it is below the threshold 
         """
-        combined = [context_1,*args]
-        chs = random.choice(range(len(combined)))
-        return chs, combined[chs]
+        weak_fact = fact[0]
+        if fact[1] > self.SWITCH_THRESHOLD:
+            #word = self.word_from_context(fact[0].context_1) # find the word
+            #weak_fact = weak_fact._replace(chosen_context = word)
+            weak_fact = weak_fact._replace(chosen_context = weak_fact.question)
+
+        else:
+            weak_fact = weak_fact._replace(chosen_context = weak_fact.context_1) # chosen context is the first context 
+
+        return weak_fact
     
     
     def add_fact(self, fact):
@@ -74,13 +83,17 @@ class SpacingModel(object):
         # Prevent an immediate repetition of the same fact
         if len(seen_facts) > 2:
             last_response = self.responses[-1]
+            print("less than 2 facts ")
             seen_facts = [(f, a) for (f, a) in seen_facts if f.fact_id != last_response.fact.fact_id]
 
         # Reinforce the weakest fact with an activation below the threshold
         seen_facts_below_threshold = [(f, a) for (f, a) in seen_facts if a < self.FORGET_THRESHOLD]
         if len(not_seen_facts) == 0 or len(seen_facts_below_threshold) > 0:
             weakest_fact = min(seen_facts, key = lambda t: t[1])
-            return((weakest_fact[0], False))
+            print("weakest fact activation: " + str(weakest_fact[1]))
+            weakest_fact_info = self.decide_context(weakest_fact)
+            #return((weakest_fact[0], False))
+            return((weakest_fact_info, False))
 
         # If none of the previously seen facts has an activation below the threshold, return a new fact
         return((not_seen_facts[0][0], True))
@@ -148,10 +161,10 @@ class SpacingModel(object):
             return(self.DEFAULT_ALPHA)
 
         a_fit = previous_alpha
-        chosen_context_id, chosen_context_found = self.decide_context(response.fact.context_1, response.fact.context_2)
+        #chosen_context_id, chosen_context_found = self.decide_context(response.fact.context_1, response.fact.context_2)
         # response.fact.chosen_context = chosen_context_id
         # reading_time = self.get_reading_time(response.fact.question)
-        reading_time = self.get_reading_time(chosen_context_found)
+        reading_time = self.get_reading_time(response.fact.chosen_context)
         estimated_rt = self.estimate_reaction_time_from_activation(activation, reading_time)
         est_diff = estimated_rt - self.normalise_reaction_time(response)
 
@@ -224,8 +237,8 @@ class SpacingModel(object):
         Return the highest response time we can reasonably expect for a given fact
         """
 
-        chosen_context_id, chosen_context_found = self.decide_context(fact.context_1, fact.context_2)
-        reading_time = self.get_reading_time(chosen_context_found)
+        #chosen_context_id, chosen_context_found = self.decide_context(fact.context_1, fact.context_2)
+        reading_time = self.get_reading_time(fact.chosen_context)
         # reading_time = self.get_reading_time(fact.question)
         max_rt = 1.5 * self.estimate_reaction_time_from_activation(self.FORGET_THRESHOLD, reading_time)
         return(max_rt)
