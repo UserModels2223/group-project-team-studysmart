@@ -7,7 +7,7 @@ import numpy as np
 import re
 
 # Fact = namedtuple("Fact", "fact_id, question, answer")
-Fact = namedtuple("Fact", "fact_id, question, context_1, context_2, answer, chosen_context")
+Fact = namedtuple("Fact", "fact_id, question, context_1, context_2, answer, chosen_context, encounter_2")
 Response = namedtuple("Response", "fact, start_time, rt, correct")
 Encounter = namedtuple("Encounter", "activation, time, reaction_time, decay")
 
@@ -17,7 +17,7 @@ class SpacingModel(object):
     LOOKAHEAD_TIME = 15000
     FORGET_THRESHOLD = -0.8
     WORD_THRESHOLD = 0.29
-    CONTEXT2_THRESHOLD = 0.35
+    CONTEXT2_THRESHOLD = 0.4
     DEFAULT_ALPHA = 0.3
     C = 0.25
     F = 1.0
@@ -31,16 +31,19 @@ class SpacingModel(object):
         Changes the cosen context to word if the activation is above the switch threshold, 
         and back to context if it is below the threshold 
         """
-        alpha = self.get_rate_of_forgetting(self, current_time, fact)
+        alpha = self.get_rate_of_forgetting(current_time, fact)
+
+
 
         if alpha <= self.WORD_THRESHOLD:
-            weak_fact = weak_fact._replace(chosen_context = weak_fact.question)
+            fact = fact._replace(chosen_context = fact.question)
         
-        elif alpha >= self.CONTEXT2_THRESHOLD:
-            weak_fact = weak_fact._replace(chosen_context = weak_fact.context_2)
+        elif alpha >= self.CONTEXT2_THRESHOLD or fact.encounter_2:
+            fact = fact._replace(chosen_context = fact.context_2)
+            fact = fact._replace(encounter_2 = True)
         
         else:
-            weak_fact = weak_fact._replace(chosen_context = weak_fact.context_1)
+            fact = fact._replace(chosen_context = fact.context_1)
 
 
         # weak_fact = fact[0]
@@ -52,7 +55,7 @@ class SpacingModel(object):
         # else:
         #     weak_fact = weak_fact._replace(chosen_context = weak_fact.context_1) # chosen context is the first context 
 
-        return weak_fact
+        return fact
     
     
     def add_fact(self, fact):
@@ -169,7 +172,7 @@ class SpacingModel(object):
         """
         Estimate the rate of forgetting parameter (alpha) for an item.
         """
-        if len(encounters) < 3:
+        if len(encounters) < 2:
             return(self.DEFAULT_ALPHA)
 
         a_fit = previous_alpha
@@ -287,7 +290,7 @@ class UIFeatures(SpacingModel):
     """
     def __init__(self) -> None:
         super().__init__()
-        self.vocab_df = pd.read_csv("./vocabulary_marked.csv") #annotated data
+        self.vocab_df = pd.read_csv(pool[u"vocabulary_marked.csv"]) #annotated data
         self.vocab_dict = dict(zip(self.vocab_df["question"].values, self.vocab_df["answer"].values)) # word: translation pairs
         self.reverse_vocab_dict = dict(zip(self.vocab_df["answer"].values, self.vocab_df["question"].values)) # translation:word pairs
 
