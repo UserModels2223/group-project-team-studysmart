@@ -16,7 +16,8 @@ class SpacingModel(object):
     # Model constants
     LOOKAHEAD_TIME = 15000
     FORGET_THRESHOLD = -0.8
-    SWITCH_THRESHOLD = -0.9
+    WORD_THRESHOLD = 0.29
+    CONTEXT2_THRESHOLD = 0.35
     DEFAULT_ALPHA = 0.3
     C = 0.25
     F = 1.0
@@ -25,19 +26,31 @@ class SpacingModel(object):
         self.facts = []
         self.responses = []
     
-    def decide_context(self, fact):
+    def decide_context(self, fact, current_time):
         """
         Changes the cosen context to word if the activation is above the switch threshold, 
         and back to context if it is below the threshold 
         """
-        weak_fact = fact[0]
-        if fact[1] > self.SWITCH_THRESHOLD:
-            #word = self.word_from_context(fact[0].context_1) # find the word
-            #weak_fact = weak_fact._replace(chosen_context = word)
-            weak_fact = weak_fact._replace(chosen_context = weak_fact.question)
+        alpha = self.get_rate_of_forgetting(self, current_time, fact)
 
+        if alpha <= self.WORD_THRESHOLD:
+            weak_fact = weak_fact._replace(chosen_context = weak_fact.question)
+        
+        elif alpha >= self.CONTEXT2_THRESHOLD:
+            weak_fact = weak_fact._replace(chosen_context = weak_fact.context_2)
+        
         else:
-            weak_fact = weak_fact._replace(chosen_context = weak_fact.context_1) # chosen context is the first context 
+            weak_fact = weak_fact._replace(chosen_context = weak_fact.context_1)
+
+
+        # weak_fact = fact[0]
+        # if fact[1] > self.SWITCH_THRESHOLD:
+        #     #word = self.word_from_context(fact[0].context_1) # find the word
+        #     #weak_fact = weak_fact._replace(chosen_context = word)
+        #     weak_fact = weak_fact._replace(chosen_context = weak_fact.question)
+
+        # else:
+        #     weak_fact = weak_fact._replace(chosen_context = weak_fact.context_1) # chosen context is the first context 
 
         return weak_fact
     
@@ -90,8 +103,7 @@ class SpacingModel(object):
         seen_facts_below_threshold = [(f, a) for (f, a) in seen_facts if a < self.FORGET_THRESHOLD]
         if len(not_seen_facts) == 0 or len(seen_facts_below_threshold) > 0:
             weakest_fact = min(seen_facts, key = lambda t: t[1])
-            print("weakest fact activation: " + str(weakest_fact[1]))
-            weakest_fact_info = self.decide_context(weakest_fact)
+            weakest_fact_info = self.decide_context(weakest_fact[0], current_time)
             #return((weakest_fact[0], False))
             return((weakest_fact_info, False))
 
@@ -282,7 +294,7 @@ class UIFeatures(SpacingModel):
     def word_from_context(self, context):
         """
         Extract the required word from the context. 
-        Eg: 
+        Eg:
         "Deze opleiding heeft 'gemiddeld' 60 studenten per jaar." -> 'gemiddeld'
         """
         return re.findall("'.*'", context)[-1].replace("'","")
@@ -353,6 +365,7 @@ class UIFeatures(SpacingModel):
         # Add column for rate of forgetting estimate after each observation
         dat["alpha"] = dat.apply(self.calc_rof, axis = 1)
         dat["reading_time"] = dat.apply(self.calc_reading_time, axis =1)
+        dat["fogetting_rate"] = dat.apply(self.calc_rof, axis = 1)
         # dat["chosen_context"] = dat.apply(chosen_context_finder, axis =1)
         dat.drop(columns = "fact", inplace = True)
 
