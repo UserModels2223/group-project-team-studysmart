@@ -1,5 +1,11 @@
 trial_start_time = clock.time()
 
+# Textbox coordinates
+n1 = -125,125
+n2 = 125,125
+n3 = 125,75
+n4 = -125,75
+	
 # Get next fact from the model
 next_fact, new = m.get_next_fact(current_time = trial_start_time)
 #prompt = next_fact.question
@@ -11,6 +17,8 @@ my_canvas = Canvas()
 my_canvas.text(prompt, font_size = 30)
 #if new:
 #	my_canvas.text(answer, y = 50, font_size = 20)
+my_canvas.polygon([n1, n2, n3, n4], fill=True, color="white")
+my_canvas.text("Type here...", font_size=30, y=100, color="gray")
 my_canvas.prepare()
 my_canvas.show()
 
@@ -47,28 +55,33 @@ while True:
 	# Update what's on screen'
 	my_canvas.clear()
 	my_canvas.text(prompt, font_size = 30)
-	if new:
-		my_canvas.text(answer, y = 50, font_size = 20)
+#	if new:
+#		my_canvas.text(answer, y = 50, font_size = 20)
+	my_canvas.polygon([n1, n2, n3, n4], fill=True, color="white")
 	my_canvas.text(keyboard_response, y = 100)
+#	my_canvas.polygon([n1, n2, n3, n4], fill=False)
 	my_canvas.prepare()
 	my_canvas.show()
 
 
 # Check if the response is correct
-# correct = keyboard_response == answer
 if [keyboard_response == x for x in answer].count(True) >0:
     correct = True
 else:
     correct = False
+
 # Log response
 response = Response(next_fact, trial_start_time, rt, correct)
 m.register_response(response) 
 
 # Show feedback
 feedback_color = "green" if correct else "red"
-my_canvas.text(keyboard_response, y = 100, color = feedback_color)
+my_canvas.polygon([n1, n2, n3, n4], fill=True, color=feedback_color)
+my_canvas.text(keyboard_response, y = 100, color = "white")
+if correct:
+	my_canvas.text("Correct!", y=150, color="green")
 if not correct:
-	my_canvas.text(answer, y = 150)
+	my_canvas.text(answer[0], y = 150)
 my_canvas.prepare()
 my_canvas.show()
 clock.sleep(var.feedback_duration)
