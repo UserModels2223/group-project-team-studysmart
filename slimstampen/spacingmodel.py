@@ -17,7 +17,7 @@ class SpacingModel(object):
     LOOKAHEAD_TIME = 15000
     FORGET_THRESHOLD = -0.8
     WORD_THRESHOLD = 0.29
-    CONTEXT2_THRESHOLD = 0.4
+    CONTEXT2_THRESHOLD = 0.35
     DEFAULT_ALPHA = 0.3
     C = 0.25
     F = 1.0
@@ -33,27 +33,16 @@ class SpacingModel(object):
         """
         alpha = self.get_rate_of_forgetting(current_time, fact)
 
-
-
         if alpha <= self.WORD_THRESHOLD:
             fact = fact._replace(chosen_context = fact.question)
         
-        elif alpha >= self.CONTEXT2_THRESHOLD or fact.encounter_2:
-            fact = fact._replace(chosen_context = fact.context_2)
-            fact = fact._replace(encounter_2 = True)
+        elif alpha < self.CONTEXT2_THRESHOLD and fact.encounter_2 == False:
+            fact = fact._replace(chosen_context = fact.context_1)
+            
         
         else:
-            fact = fact._replace(chosen_context = fact.context_1)
-
-
-        # weak_fact = fact[0]
-        # if fact[1] > self.SWITCH_THRESHOLD:
-        #     #word = self.word_from_context(fact[0].context_1) # find the word
-        #     #weak_fact = weak_fact._replace(chosen_context = word)
-        #     weak_fact = weak_fact._replace(chosen_context = weak_fact.question)
-
-        # else:
-        #     weak_fact = weak_fact._replace(chosen_context = weak_fact.context_1) # chosen context is the first context 
+            fact = fact._replace(chosen_context = fact.context_2)
+            self.facts[fact.fact_id-1] = fact._replace(encounter_2 = True)
 
         return fact
     
@@ -89,7 +78,7 @@ class SpacingModel(object):
         """
         Returns a tuple containing the fact that needs to be repeated most urgently and a boolean indicating whether this fact is new (True) or has been presented before (False).
         If none of the previously studied facts needs to be repeated right now, return a new fact instead.
-        """
+        """ 
         # Calculate all fact activations in the near future
         fact_activations = [(f, self.calculate_activation(current_time + self.LOOKAHEAD_TIME, f)) for f in self.facts]
 
@@ -103,7 +92,7 @@ class SpacingModel(object):
             seen_facts = [(f, a) for (f, a) in seen_facts if f.fact_id != last_response.fact.fact_id]
 
         # Reinforce the weakest fact with an activation below the threshold
-        seen_facts_below_threshold = [(f, a) for (f, a) in seen_facts if a < self.FORGET_THRESHOLD]
+        seen_facts_below_threshold = [(f, a) for (f, a)in seen_facts if a < self.FORGET_THRESHOLD]
         if len(not_seen_facts) == 0 or len(seen_facts_below_threshold) > 0:
             weakest_fact = min(seen_facts, key = lambda t: t[1])
             weakest_fact_info = self.decide_context(weakest_fact[0], current_time)
@@ -290,7 +279,8 @@ class UIFeatures(SpacingModel):
     """
     def __init__(self) -> None:
         super().__init__()
-        self.vocab_df = pd.read_csv(pool[u"vocabulary_marked.csv"]) #annotated data
+        #self.vocab_df = pd.read_csv(pool[u"vocabulary_marked.csv"]) #annotated data
+        self.vocab_df = pd.read_csv("vocabulary_marked.csv") #annotated data
         self.vocab_dict = dict(zip(self.vocab_df["question"].values, self.vocab_df["answer"].values)) # word: translation pairs
         self.reverse_vocab_dict = dict(zip(self.vocab_df["answer"].values, self.vocab_df["question"].values)) # translation:word pairs
 
