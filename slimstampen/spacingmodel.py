@@ -279,7 +279,7 @@ class UIFeatures(SpacingModel):
     """
     def __init__(self) -> None:
         super().__init__()
-        #self.vocab_df = pd.read_csv(pool[u"vocabulary_marked.csv"]) #annotated data
+        # self.vocab_df = pd.read_csv(pool[u"vocabulary_marked.csv"]) #annotated data
         self.vocab_df = pd.read_csv("vocabulary_marked.csv") #annotated data
         self.vocab_dict = dict(zip(self.vocab_df["question"].values, self.vocab_df["answer"].values)) # word: translation pairs
         self.reverse_vocab_dict = dict(zip(self.vocab_df["answer"].values, self.vocab_df["question"].values)) # translation:word pairs
@@ -356,7 +356,7 @@ class UIFeatures(SpacingModel):
         dat = pd.concat([dat_resp, dat_facts], axis = 1)
 
         # Add column for rate of forgetting estimate after each observation
-        dat["alpha"] = dat.apply(self.calc_rof, axis = 1)
+        # dat["alpha"] = dat.apply(self.calc_rof, axis = 1)
         dat["reading_time"] = dat.apply(self.calc_reading_time, axis =1)
         dat["fogetting_rate"] = dat.apply(self.calc_rof, axis = 1)
         # dat["chosen_context"] = dat.apply(chosen_context_finder, axis =1)
