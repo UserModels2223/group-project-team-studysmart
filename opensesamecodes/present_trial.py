@@ -5,6 +5,11 @@ n1 = -125,125
 n2 = 125,125
 n3 = 125,75
 n4 = -125,75
+
+a1 = 200,-200
+a2 = -200,-200
+a3 = -200,-150
+a4 = 200,-150
 	
 # Get next fact from the model
 next_fact, new = m.get_next_fact(current_time = trial_start_time)
@@ -19,6 +24,7 @@ my_canvas.text(prompt, font_size = 30)
 #	my_canvas.text(answer, y = 50, font_size = 20)
 my_canvas.polygon([n1, n2, n3, n4], fill=True, color="white")
 my_canvas.text("Type here...", font_size=30, y=100, color="gray")
+
 my_canvas.prepare()
 my_canvas.show()
 
@@ -59,16 +65,19 @@ while True:
 #		my_canvas.text(answer, y = 50, font_size = 20)
 	my_canvas.polygon([n1, n2, n3, n4], fill=True, color="white")
 	my_canvas.text(keyboard_response, y = 100)
-#	my_canvas.polygon([n1, n2, n3, n4], fill=False)
+
+	#my_canvas['achi'] = polygon([a1, a2, a3, a4], fill=True, color="white")
 	my_canvas.prepare()
 	my_canvas.show()
+	print(m.responses)
+	
 
 
 # Check if the response is correct
 if [keyboard_response == x for x in answer].count(True) >0:
-    correct = True
+	correct = True
 else:
-    correct = False
+	correct = False
 
 # Log response
 response = Response(next_fact, trial_start_time, rt, correct)
@@ -77,7 +86,55 @@ m.register_response(response)
 # Show feedback
 feedback_color = "green" if correct else "red"
 my_canvas.polygon([n1, n2, n3, n4], fill=True, color=feedback_color)
-my_canvas.text(keyboard_response, y = 100, color = "white")
+my_canvas.polygon([a1, a2, a3, a4], fill=True, color="white")
+
+def create_statistics(responses):
+	dat_resp = pd.DataFrame(responses)
+	dat_facts = pd.DataFrame([r.fact for r in responses])
+	dat = pd.concat([dat_resp, dat_facts], axis = 1)
+
+	# Add column for rate of forgetting estimate after each observation
+	#dat["alpha"] = dat.apply(self.calc_rof, axis = 1)
+	#dat["reading_time"] = dat.apply(self.calc_reading_time, axis =1)
+	#dat["fogetting_rate"] = dat.apply(self.calc_rof, axis = 1)
+	# dat["chosen_context"] = dat.apply(chosen_context_finder, axis =1)
+	dat.drop(columns = "fact", inplace = True)
+
+	# Add trial number column
+	dat.index.name = "trial"
+	dat.index = dat.index + 1
+
+	return dat
+
+def achievement(responses):
+	"""
+	All stats for user achievements
+	"""
+	dat = create_statistics(responses)
+	correct, wrong = 0,0
+	try:
+		correct, wrong = dat["correct"].value_counts().values
+	except:
+		correct = dat["correct"].value_counts()
+	mean_correct = correct/(correct+wrong)
+	mean_wrong = wrong/(correct+wrong)
+	return f"{int(correct)}/{int(correct+wrong)} so far!!"
+
+	# return f"""
+	#     Trial Index : {str(dat.index)}\r
+	#     Total Correct : {correct}\r
+	#     Total Wrong : {wrong}\r
+	#     Mean Correct : {mean_correct}\r
+	#     Mean Wrong : {mean_wrong}\r
+	#     """
+ach = None
+try:
+	ach = achievement(m.responses)
+except Exception as e:
+	print(e)
+if ach!=None:
+	my_canvas.text(ach, y = -175)
+
 if correct:
 	my_canvas.text("Correct!", y=150, color="green")
 if not correct:
