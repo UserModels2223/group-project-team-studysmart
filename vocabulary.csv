@@ -25,7 +25,7 @@ id,question,context_1,context_2,answer
 24, "gewoonte", "Ik heb de slechte gewoonte om te laat te komen.", "Het is een goede gewoonte om je handen te wassen voor het eten.", "habit"
 25, "verwarring", "De fout op de poster zorgde voor veel verwarring.", "Tegenstrijdige berichten leiden tot verwarring.", "confusion"
 26, "vreugde", "Het optreden bracht haar intense vreugde.", "De vreugde van kinderen is aanstekelijk.", "joy"
-27, "verwondering", "Kinderen zitten vol verwondering.", "Ik sta vol verwondering naar de sterren te kijken.", "wonder"
+27, "verwondering", "Kinderen zitten vol verwondering.", "Ik sta vol verwondering naar de sterren te kijken.", "wonder;astonishment;suprise"
 28, "scheren", "Ik moet iedere morgen opnieuw de stoppels van mijn gezicht scheren.", "Mijn vader heeft me geleerd hoe ik moet scheren.", "shave;to shave"
 29, "blinken", "Nieuwe munten blinken nog.", "De sterren blinken in de nacht.", "shine;to shine;"
 30, "kraag", "De kraag van mijn overhemd is te strak.", "Zij greep hem bij de kraag toen hij iets verkeerd deed.", "collar"
