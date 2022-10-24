@@ -21,6 +21,7 @@ class SpacingModel(object):
     DEFAULT_ALPHA = 0.3
     C = 0.25
     F = 1.0
+    SHUFFLE_DATA_BEFORE_LOADING = False
 
     def __init__(self):
         self.facts = []

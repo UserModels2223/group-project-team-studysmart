@@ -1,6 +1,3 @@
 trial,start_time,rt,correct,fact_id,question,context_1,context_2,answer,chosen_context,encounter_2,reading_time,fogetting_rate
-1,4770.856499904767,inf,True,1,vergeten,Ben je nou alweer je sleutel <b>vergeten</b>?,"Sorry, we waren <b>vergeten</b> de wiki aan te passen.",forget;to forget;forgot,Ben je nou alweer je sleutel <b>vergeten</b>?,False,719.6,0.3
-2,7731.108124833554,342.03758416697383,True,1,vergeten,Ben je nou alweer je sleutel <b>vergeten</b>?,"Sorry, we waren <b>vergeten</b> de wiki aan te passen.",forget;to forget;forgot,Ben je nou alweer je sleutel <b>vergeten</b>?,False,719.6,0.250390625
-3,9898.73908390291,inf,True,2,vervelend,Ik vind het <b>vervelend</b> als de koffie op is.,Doe eens niet zo <b>vervelend</b>.,annoying,Ik vind het <b>vervelend</b> als de koffie op is.,False,797.6,0.3
-4,12753.129999851808,362.096874974668,True,2,vervelend,Ik vind het <b>vervelend</b> als de koffie op is.,Doe eens niet zo <b>vervelend</b>.,annoying,Ik vind het <b>vervelend</b> als de koffie op is.,False,797.6,0.250390625
+1,4716.537958011031,inf,False,0,matig,De burger smaakte een beetje <b>matig</b>.,Ik ben <b>matig</b> enthousiast over deze activiteit.,mediocre,De burger smaakte een beetje <b>matig</b>.,False,661.1,0.3
 
