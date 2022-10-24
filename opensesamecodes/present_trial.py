@@ -10,6 +10,11 @@ a1 = 200,-200
 a2 = -200,-200
 a3 = -200,-150
 a4 = 200,-150
+num_words_tested = 0
+num_tested_correct = 0
+
+def is_a_test(x): #check if its a word not a sentence
+	return len(x.split(" ")) ==1
 	
 # Get next fact from the model
 next_fact, new = m.get_next_fact(current_time = trial_start_time)
@@ -86,7 +91,10 @@ m.register_response(response)
 # Show feedback
 feedback_color = "green" if correct else "red"
 my_canvas.polygon([n1, n2, n3, n4], fill=True, color=feedback_color)
-my_canvas.polygon([a1, a2, a3, a4], fill=True, color="white")
+my_canvas.text(keyboard_response, y = 100, color="white")
+if is_a_test(prompt) == True:
+	my_canvas.polygon([a1, a2, a3, a4], fill=True, color="white")
+	num_words_tested += 1
 
 def create_statistics(responses):
 	dat_resp = pd.DataFrame(responses)
@@ -106,7 +114,7 @@ def create_statistics(responses):
 
 	return dat
 
-def achievement(responses):
+def achievement(responses,num_words_tested,num_tested_correct):
 	"""
 	All stats for user achievements
 	"""
@@ -118,7 +126,10 @@ def achievement(responses):
 		correct = dat["correct"].value_counts()
 	mean_correct = correct/(correct+wrong)
 	mean_wrong = wrong/(correct+wrong)
-	return f"{int(correct)}/{int(correct+wrong)} so far!!"
+	
+	correct = num_tested_correct
+	wrong = num_words_tested - num_tested_correct
+	return f"{int(correct)}/{int(num_words_tested)} so far!!"
 
 	# return f"""
 	#     Trial Index : {str(dat.index)}\r
@@ -129,14 +140,16 @@ def achievement(responses):
 	#     """
 ach = None
 try:
-	ach = achievement(m.responses)
+	ach = achievement(m.responses, num_words_tested,num_tested_correct)
 except Exception as e:
 	print(e)
-if ach!=None:
+if ach!=None and is_a_test(prompt) == True:
 	my_canvas.text(ach, y = -175)
 
 if correct:
 	my_canvas.text("Correct!", y=150, color="green")
+	if is_a_test(prompt) == True:
+		num_tested_correct+=1
 if not correct:
 	my_canvas.text(answer[0], y = 150)
 my_canvas.prepare()
@@ -155,3 +168,4 @@ if clock.time() - var.session_start_time >= var.session_duration:
 	
 # Increment trial number
 var.trial_num += 1
+
