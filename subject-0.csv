@@ -1,4 +1,3 @@
-trial,start_time,rt,correct,fact_id,question,context_1,context_2,answer,chosen_context,encounter_2,reading_time,fogetting_rate
-1,42071.10539999849,1512.7700000011828,True,1,vergeten,Ben je nou alweer je sleutel <b>vergeten</b>?,"Sorry, we waren <b>vergeten</b> de wiki aan te passen.",forget;to forget;forgot,Ben je nou alweer je sleutel <b>vergeten</b>?,False,719.6,0.3
-2,45542.81400000036,437.4201000027824,True,1,vergeten,Ben je nou alweer je sleutel <b>vergeten</b>?,"Sorry, we waren <b>vergeten</b> de wiki aan te passen.",forget;to forget;forgot,Ben je nou alweer je sleutel <b>vergeten</b>?,False,719.6,0.250390625
+trial,start_time,rt,correct,fact_id,question,context_1,context_2,answer,chosen_context,encounter_2,reading_time,fogetting_rate
+1,4716.537958011031,inf,False,0,matig,De burger smaakte een beetje <b>matig</b>.,Ik ben <b>matig</b> enthousiast over deze activiteit.,mediocre,De burger smaakte een beetje <b>matig</b>.,False,661.1,0.3
 
