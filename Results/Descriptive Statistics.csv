@@ -1,0 +1,15 @@
+subject,age,language,course,test score (max 19)
+38,25,Slovenian,A2,6
+9,23,Hindi,0,4
+11,23,Telugu,A1,6
+80,25,German,A1,12
+18,24,Hindi,A1,2
+45,22,English,0,4
+,,,,
+,,,,
+,,,,
+average age,,,average test score,
+23.6666666666667,,,5.66666666666667,
+,,,,
+std age,,,std test score,
+1.211060141639,,,3.44480284873702,
