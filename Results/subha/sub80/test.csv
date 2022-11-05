@@ -1,0 +1,89 @@
+trial;fact;start_time;rt;correct;fact_id;question;answer
+;;;;;;;
+1;Word(fact_id=1, question='beschrijven', answer=['describe', 'to describe']);1662592.962;1747.9535;TRUE;1;beschrijven;['describe', 'to describe']
+;;;;;;;
+2;Word(fact_id=2, question='nieuwsgierig', answer=['curious']);1667629.031;1216.4935;TRUE;2;nieuwsgierig;['curious']
+;;;;;;;
+3;Word(fact_id=3, question='zelfstandig', answer=['independent', 'independently']);1671609.845;1160.5895;FALSE;3;zelfstandig;['independent', 'independently']
+;;;;;;;
+4;Word(fact_id=4, question='eenzaamheid', answer=['loneliness', 'solitude']);1675810.187;1148.1675;TRUE;4;eenzaamheid;['loneliness', 'solitude']
+;;;;;;;
+5;Word(fact_id=5, question='verschrikkelijk', answer=['terrible', 'awful', 'horrible', 'dreadful']);1681547.264;1173.2936;TRUE;5;verschrikkelijk;['terrible', 'awful', 'horrible', 'dreadful']
+;;;;;;;
+6;Word(fact_id=6, question='overdrijven', answer=['exaggerate', 'to exaggerate']);1685455.315;1293.4981;TRUE;6;overdrijven;['exaggerate', 'to exaggerate']
+;;;;;;;
+7;Word(fact_id=7, question='blinken', answer=['shine', 'to shine']);1690547.236;1468.6343;TRUE;7;blinken;['shine', 'to shine']
+;;;;;;;
+8;Word(fact_id=8, question='scheren', answer=['shave', 'to shave<b>']);1694089.095;2369.1161;TRUE;8;scheren;['shave', 'to shave<b>']
+;;;;;;;
+9;Word(fact_id=9, question='vergeven', answer=['forgive', 'to forgive']);1698604.31;1795.3197;TRUE;9;vergeven;['forgive', 'to forgive']
+;;;;;;;
+10;Word(fact_id=10, question='verwondering', answer=['wonder', 'surprise']);1704142.014;1900.4144;TRUE;10;verwondering;['wonder', 'surprise']
+;;;;;;;
+11;Word(fact_id=11, question='gewoonte', answer=['habit']);1708166.647;1396.7712;TRUE;11;gewoonte;['habit']
+;;;;;;;
+12;Word(fact_id=12, question='onverschillig', answer=['indifferent']);1711799.637;1539.3977;TRUE;12;onverschillig;['indifferent']
+;;;;;;;
+13;Word(fact_id=13, question='moed', answer=['courage']);1716178.565;1786.0087;TRUE;13;moed;['courage']
+;;;;;;;
+14;Word(fact_id=14, question='bijeenkomst', answer=['meeting', 'gathering']);1720351.552;1428.5808;TRUE;14;bijeenkomst;['meeting', 'gathering']
+;;;;;;;
+15;Word(fact_id=15, question='vriendschap', answer=['friendship']);1724373.724;1026.8846;TRUE;15;vriendschap;['friendship']
+;;;;;;;
+16;Word(fact_id=16, question='vreugde', answer=['joy']);1728556.802;1695.0009;TRUE;16;vreugde;['joy']
+;;;;;;;
+17;Word(fact_id=17, question='ongemakkelijk', answer=['awkward']);1732174.919;2105.108;TRUE;17;ongemakkelijk;['awkward']
+;;;;;;;
+18;Word(fact_id=18, question='verwarring', answer=['confusion']);1737159.862;2232.6214;TRUE;18;verwarring;['confusion']
+;;;;;;;
+19;Word(fact_id=19, question='tevreden', answer=['satisfied']);1742423.598;1341.5712;TRUE;19;tevreden;['satisfied']
+;;;;;;;
+20;Word(fact_id=20, question='begroeten', answer=['greet', 'to greet']);1746830.171;1238.7916;TRUE;20;begroeten;['greet', 'to greet']
+;;;;;;;
+21;Word(fact_id=21, question='spontaan', answer=['spontaneous']);1750550.881;1163.0402;TRUE;21;spontaan;['spontaneous']
+;;;;;;;
+22;Word(fact_id=22, question='kraag', answer=['collar']);1756860.277;974.1864;TRUE;22;kraag;['collar']
+;;;;;;;
+23;Word(fact_id=1, question='kerel', answer=['guy', 'dude']);3028326.577;1361.9854;TRUE;1;kerel;['guy', 'dude']
+;;;;;;;
+24;Word(fact_id=2, question='behoefte', answer=['need']);3031806.223;1403.5356;TRUE;2;behoefte;['need']
+;;;;;;;
+25;Word(fact_id=3, question='onderdeel', answer=['part', 'part of']);3035267.067;1382.9283;TRUE;3;onderdeel;['part', 'part of']
+;;;;;;;
+26;Word(fact_id=4, question='beseffen', answer=['realize', 'to realize']);3039732.62;7350.1144;FALSE;4;beseffen;['realize', 'to realize']
+;;;;;;;
+27;Word(fact_id=5, question='alternatief', answer=['alternative']);3049663.41;2549.5761;TRUE;5;alternatief;['alternative']
+;;;;;;;
+28;Word(fact_id=6, question='bewaren', answer=['keep', 'to keep']);3056926.286;1364.2363;TRUE;6;bewaren;['keep', 'to keep']
+;;;;;;;
+29;Word(fact_id=7, question='betreffen', answer=['concern', 'to concern', 'concerns']);3060889.047;8327.5302;TRUE;7;betreffen;['concern', 'to concern', 'concerns']
+;;;;;;;
+30;Word(fact_id=8, question='vervelend', answer=['annoying']);3071549.147;8508.3221;TRUE;8;vervelend;['annoying']
+;;;;;;;
+31;Word(fact_id=9, question='voldoende', answer=['sufficient', 'enough']);3083042.456;2766.641;TRUE;9;voldoende;['sufficient', 'enough']
+;;;;;;;
+32;Word(fact_id=10, question='waarschuwen', answer=['warn', 'to warn', 'warning']);3088791.613;1337.1865;TRUE;10;waarschuwen;['warn', 'to warn', 'warning']
+;;;;;;;
+33;Word(fact_id=11, question='uitnodigen', answer=['invite', 'to invite']);3093430.404;2582.9778;FALSE;11;uitnodigen;['invite', 'to invite']
+;;;;;;;
+34;Word(fact_id=12, question='vaag', answer=['vague']);3099765.608;1380.3229;TRUE;12;vaag;['vague']
+;;;;;;;
+35;Word(fact_id=13, question='fluisteren', answer=['whisper', 'to whisper']);3103315.864;5280.3623;TRUE;13;fluisteren;['whisper', 'to whisper']
+;;;;;;;
+36;Word(fact_id=14, question='woede', answer=['rage', 'anger']);3111787.483;1510.7569;TRUE;14;woede;['rage', 'anger']
+;;;;;;;
+37;Word(fact_id=15, question='matig', answer=['mediocre']);3115386.226;1418.6264;TRUE;15;matig;['mediocre']
+;;;;;;;
+38;Word(fact_id=16, question='algemeen', answer=['general']);3119807.844;1181.8058;FALSE;16;algemeen;['general']
+;;;;;;;
+39;Word(fact_id=17, question='gemiddeld', answer=['average', 'on average']);3123442.187;4272.3744;TRUE;17;gemiddeld;['average', 'on average']
+;;;;;;;
+40;Word(fact_id=18, question='vergeten', answer=['forget', 'to forget', 'forgot']);3130088.164;2873.0343;TRUE;18;vergeten;['forget', 'to forget', 'forgot']
+;;;;;;;
+41;Word(fact_id=19, question='dreigen', answer=['threaten', 'to threaten']);3137854.166;3413.8605;TRUE;19;dreigen;['threaten', 'to threaten']
+;;;;;;;
+42;Word(fact_id=20, question='meningen', answer=['opinions']);3144795.169;1581.7134;TRUE;20;meningen;['opinions']
+;;;;;;;
+43;Word(fact_id=21, question='woordenschat', answer=['vocabulary']);3148930.445;1192.5585;TRUE;21;woordenschat;['vocabulary']
+;;;;;;;
+44;Word(fact_id=22, question='verwachten', answer=['expect', 'to expect']);3154772.618;3336.8807;FALSE;22;verwachten;['expect', 'to expect']
